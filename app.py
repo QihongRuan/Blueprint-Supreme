@@ -54,7 +54,7 @@ def generate_rap_verse(keywords):
     ---
 
     Now, create a new, short rap verse (about 4-6 lines) in the same style.
-    This new verse must be inspired by the following keywords: "{keywords}".
+    This new verse must be inspired by the following keywords, which could describe a Super Bowl highlight or a key game moment: "{keywords}".
     Make it energetic, confident, and inspiring.
     Make sure to continue the theme of ambition and success.
     Do not repeat the chorus.
