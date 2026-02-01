@@ -1,30 +1,45 @@
+# Blueprint Supreme: A Gemini 3 SuperHack Project by Qihong Ruan
+# This Flask application powers a web interface that uses the Gemini API 
+# to generate culturally resonant Chinese rap verses based on Super Bowl highlights.
+
 import os
 from flask import Flask, render_template, request, jsonify
 import google.generativeai as genai
 
+# Initialize the Flask web application
 app = Flask(__name__)
 
-# --- CONFIGURATION ---
-# IMPORTANT: Replace "YOUR_GEMINI_API_KEY" with your actual Gemini API key.
-# You can get your key from Google's AI Studio.
-# It's recommended to set this as an environment variable for security.
+# --- CONFIGURATION: GEMINI API ---
+# This section configures the application to use the Gemini API.
+# It prioritizes using an environment variable for the API key for security.
+# IMPORTANT: A valid API key is required for the application to function.
 try:
+    # Attempt to configure the API key from an environment variable
     genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 except KeyError:
-    # If the environment variable is not set, use a placeholder.
-    # The app will not work until this is replaced with a real key.
+    # If the environment variable is not found, fall back to a placeholder.
+    # This will need to be replaced with a real key for the app to work.
     print("WARNING: GEMINI_API_KEY environment variable not found.")
     print("Please set it or replace the placeholder in the code.")
     genai.configure(api_key="YOUR_GEMINI_API_KEY")
 
 
-# --- RAP GENERATION LOGIC ---
+# --- CORE LOGIC: RAP GENERATION ---
 def generate_rap_verse(keywords):
-    """Generates a rap verse using the Gemini API."""
+    """
+    Generates a rap verse using the Gemini API based on user-provided keywords.
 
+    This function is the heart of the application. It takes a text description of a
+    Super Bowl highlight, embeds it within a carefully engineered prompt, and sends
+    it to the Gemini model to generate a creative, bilingual rap verse.
+    """
+    
+    # Initialize the Gemini Pro model
     model = genai.GenerativeModel('gemini-pro')
 
-    # The original rap song to provide context and style
+    # This multi-line string serves as the stylistic and thematic foundation for the AI.
+    # It provides the model with a strong example of the desired output, including the
+    # bilingual (English/Chinese) style and the "Blueprint Supreme" (大展鸿图) theme.
     original_rap = """
     (Intro)
     Yeah, Super Bowl in the house, 超级碗 in the building
@@ -43,7 +58,11 @@ def generate_rap_verse(keywords):
     Of how we chase our dreams, more precious than gold
     """
 
-    # The prompt for the AI model
+    # --- PROMPT ENGINEERING ---
+    # The prompt instructs the AI on its persona (a creative rap artist), its goal
+    # (competing in the hackathon), and the specific constraints for the output.
+    # By providing the `original_rap` as context, we perform "few-shot" prompting,
+    # guiding the model to generate text that matches the style.
     prompt = f"""
     You are a creative rap artist. You are competing in the Gemini 3 SuperHack.
     Your style is a mix of English and Chinese, and your theme is "大展鸿图" (realizing grand ambitions).
@@ -61,32 +80,50 @@ def generate_rap_verse(keywords):
     """
 
     try:
+        # Send the prompt to the Gemini model and get the response
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
+        # Basic error handling for the API call
         print(f"Error generating rap verse: {e}")
         return "Oops! The AI is taking a timeout. Please try again."
 
 
-# --- ROUTES ---
+# --- WEB ROUTES ---
+# This section defines the endpoints for the web application.
+
 @app.route('/')
 def index():
-    """Renders the main page."""
+    """
+    Renders the main page (index.html) of the web application.
+    This is the user's entry point to the app.
+    """
     return render_template('index.html')
 
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    """API endpoint to generate a rap verse."""
+    """
+    This is the API endpoint that the frontend calls to generate a rap verse.
+    It receives a POST request with JSON data containing the user's keywords.
+    """
+    # Get the JSON data from the incoming request
     data = request.get_json()
+    # Extract the 'keywords' from the data
     keywords = data.get('keywords')
 
+    # Basic validation to ensure keywords are provided
     if not keywords:
         return jsonify({'error': 'Keywords are required.'}), 400
 
+    # Call our core logic function to generate the verse
     verse = generate_rap_verse(keywords)
+    # Return the generated verse as a JSON response
     return jsonify({'verse': verse})
 
 
+# Standard Python entry point to run the Flask app
 if __name__ == '__main__':
+    # Enables debug mode for development, which provides helpful error messages
     app.run(debug=True)
+
