@@ -1,10 +1,6 @@
 # Blueprint Supreme (大展鸿图)
 
-Our project, "Blueprint Supreme" (reflecting '大展鸿图' - "Realize Grand Ambitions"), is a powerful tool designed to bridge the cultural gap and connect the Super Bowl with its vast and growing Chinese audience. We solve a key problem: making American football not just understood, but culturally resonant and exciting for millions of potential fans in China.
-
-How it works: Our application takes real-time Super Bowl highlights as input. Using the advanced reasoning of Google's Gemini API, it "learns" from the highlight and instantly generates a dynamic, bilingual Chinese rap verse in the epic style of "Blueprint Supreme." A game-winning touchdown isn't just a play; it's a tale of glory, ambition, and a dragon's triumph on the field, all captured in a personalized rap.
-
-Impact: The impact is immense. We are creating a new, culturally-fluent layer of engagement for one of the world's largest markets. This tool makes the Super Bowl more accessible, shareable, and exciting for Chinese-speaking fans, allowing them to experience the game's biggest moments through a unique cultural lens. It's not just about watching the game; it's about participating in its story and its glory, in a language and style that speaks to them, embodying the spirit of "Blueprint Supreme."
+Blueprint Supreme (大展鸿图) bridges the Super Bowl and its vast Chinese audience. Our tool transforms real-time game highlights into dynamic, bilingual Chinese rap verses in the epic 'Blueprint Supreme' style, using Google's Gemini API. By inputting a highlight, users receive a personalized rap capturing the play's excitement and cultural themes of ambition. This creates a novel, culturally-fluent engagement for millions of Chinese fans, making the Super Bowl more accessible, shareable, and exciting. It reimagines fan participation, connecting global audiences through unique storytelling.
 
 ## How to Run the Project
 
