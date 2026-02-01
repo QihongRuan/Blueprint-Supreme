@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Rap Anthem - Gemini 3 SuperHack</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Interactive Rap Anthem</h1>
+            <p class="subtitle">Powered by Gemini 3 SuperHack</p>
+        </header>
+
+        <main>
+            <form id="rap-form">
+                <p>Enter a keyword (e.g., your favorite player, your city, a feeling) and the AI will generate a unique rap verse in the style of "大展鸿图".</p>
+                <input type="text" id="keywords" placeholder="e.g., 'San Francisco', 'victory', 'the crowd'" required>
+                <button type="submit">Generate Verse</button>
+            </form>
+
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p>Generating your verse...</p>
+            </div>
+
+            <div id="result" class="hidden">
+                <h2>Your Verse:</h2>
+                <pre id="verse-text"></pre>
+            </div>
+        </main>
+
+        <footer>
+            <p>Built by Qihong for the Gemini 3 SuperHack.</p>
+        </footer>
+    </div>
+
+    <script>
+        const form = document.getElementById('rap-form');
+        const keywordsInput = document.getElementById('keywords');
+        const loadingDiv = document.getElementById('loading');
+        const resultDiv = document.getElementById('result');
+        const verseText = document.getElementById('verse-text');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const keywords = keywordsInput.value;
+            if (!keywords) {
+                return;
+            }
+
+            // Show loading and hide previous result
+            loadingDiv.classList.remove('hidden');
+            resultDiv.classList.add('hidden');
+
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ keywords }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Something went wrong. Please try again.');
+                }
+
+                const data = await response.json();
+
+                // Display the result
+                verseText.textContent = data.verse;
+                resultDiv.classList.remove('hidden');
+
+            } catch (error) {
+                console.error('Error:', error);
+                verseText.textContent = error.message;
+                resultDiv.classList.remove('hidden');
+            } finally {
+                // Hide loading
+                loadingDiv.classList.add('hidden');
+            }
+        });
+    </script>
+
+</body>
+</html>
